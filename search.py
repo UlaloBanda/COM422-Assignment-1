@@ -18,6 +18,7 @@ Pacman agents (in searchAgents.py).
 """
 
 import util
+from game import  Directions
 
 class SearchProblem:
     """
@@ -26,6 +27,44 @@ class SearchProblem:
 
     You do not need to change anything in this class, ever.
     """
+
+#search() a general search function for dfs, bfs and all search functions
+
+    def search_function(problem,structure):
+#structure are the methods of keeping track of states i.e stack, queues from util.py
+        structure.push([(problem.getStartState(), Directions.STOP, 0)])
+
+        states_visited = []
+
+
+
+        while not(structure.isEmpty()):
+
+            latest_path = structure.pop()
+
+            current_state = latest_path[0]
+
+            path = latest_path[1]
+
+            #current_state = latest_path[-1]
+
+            if location not in states_visited:
+                states_visited.append(current_state)
+                if problem.isGoalState(current_state):
+                    return path
+                succesors = [problem.getSuccessors(location)]
+
+                for succ in succesors:
+                    if succ[0] not in states_visited:
+                        return structure.push((succ[0]), path + [succ[1]])
+        return[]
+
+
+
+
+
+
+
 
     def getStartState(self):
         """
@@ -85,13 +124,22 @@ def depthFirstSearch(problem):
     print("Start:", problem.getStartState())
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
-    """
+"""
     "*** YOUR CODE HERE ***"
+
+    dfs_stack = util.Stack()
+
+    return search_function(problem, dfs_stack)
+
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
+    bfs_queue = util.Queue()
+
+    return search_function(problem, bfs_queue)
+
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):
